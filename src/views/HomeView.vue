@@ -1,18 +1,39 @@
 <template>
-  <div class="home">
-    <h3>Hello world</h3>
-    {{ pokemons }}
+<div class="w-full flex justify-center">
+  <input type="type" placeholder="Enter pokemon here" class="mt-10 p-2 border-blue-500 border-2" v-model="searchText">
+</div>
+<div class="mt-10 p-4 flex flex-wrap justify-center">
+  <div
+      class="ml-4 text-2xl text-blue-400"
+      v-for="(pokemon, idx) in filteredPokemon"
+      :key="idx"
+    >
+    {{pokemon.name}}
   </div>
+</div>
+
 </template>
 
 <script>
-import { reactive, toRefs } from "vue";
+import { reactive, toRefs, computed } from "vue";
 export default {
   setup() {
     const state = reactive({
       pokemons: [],
       urlIdLookup: {},
+      searchText: "",
+      filteredPokemon: computed(()=> updatePokemon()), 
     });
+
+    const updatePokemon =() => {
+        if(!state.searchText){
+          return [] 
+        }
+        return state.pokemons.filter((pokemon)=> 
+           pokemon.name.includes(state.searchText)
+        )
+      }
+
     fetch("https://pokeapi.co/api/v2/pokemon?offset=0")
       .then((res) => res.json())
       .then((data) => {
