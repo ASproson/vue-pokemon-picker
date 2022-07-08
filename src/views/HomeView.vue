@@ -9,8 +9,12 @@
 
 export default {
   name: "HomeView",
-  components: {
-
-  },
+  setup(){
+    fetch("https://pokeapi.co/api/v2/pokemon?offset=0")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data)
+      })
+  }
 };
 </script>
